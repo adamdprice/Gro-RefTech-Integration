@@ -1,0 +1,7 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+cronSchedule = "*/30 * * * *"
+startCommand = "python -u run_sync_all.py"
+restartPolicyType = "never"

@@ -1,0 +1,2 @@
+# No third-party dependencies — stdlib only.
+# This file exists so Railway/Nixpacks detects Python and picks the right builder.
