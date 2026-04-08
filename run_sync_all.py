@@ -120,8 +120,11 @@ def main(*, dry_run: bool = False) -> None:
         sys.exit(1)
     ot = os.environ.get("HUBSPOT_ATTENDEE_OBJECT_TYPE_ID", "2-133351180")
     # Only sync attendees whose festival_code matches this value.
-    # Leave unset (or blank) to sync all attendees with send_to_onsite_badge_printing_system=Yes.
+    # FESTIVAL_CODE must be set — if blank or absent, the sync will not run.
     festival_code = os.environ.get("FESTIVAL_CODE", "").strip() or None
+    if not festival_code:
+        print("FESTIVAL_CODE is not set — exiting without syncing.")
+        return
     # Number of parallel workers. Default 10; override with REFTECH_SYNC_WORKERS.
     workers = int(os.environ.get("REFTECH_SYNC_WORKERS", "10"))
 
