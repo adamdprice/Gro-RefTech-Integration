@@ -33,11 +33,9 @@ PROP_ERROR_DATE = "reftech_error_date"
 PROP_DELEGATE_ID = "reftech_delegate_id"
 
 
-def _utc_today_date_ms() -> str:
-    """HubSpot date picker: milliseconds since epoch at UTC midnight for *today*."""
-    now = datetime.now(timezone.utc)
-    midnight = datetime(now.year, now.month, now.day, tzinfo=timezone.utc)
-    return str(int(midnight.timestamp() * 1000))
+def _utc_now_ms() -> str:
+    """HubSpot datetime: milliseconds since epoch for the current moment."""
+    return str(int(datetime.now(timezone.utc).timestamp() * 1000))
 
 
 def _now_iso_utc() -> str:
@@ -54,7 +52,7 @@ def _date_values_for_hubspot() -> tuple[str, str]:
     if fmt == "iso":
         v = _now_iso_utc()
         return v, v
-    return _utc_today_date_ms(), _utc_today_date_ms()
+    return _utc_now_ms(), _utc_now_ms()
 
 
 def patch_attendee_properties(
