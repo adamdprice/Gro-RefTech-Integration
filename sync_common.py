@@ -28,7 +28,10 @@ HS_ATTENDEE_PROPERTIES = [
 
 
 def load_env() -> None:
-    for line in Path(__file__).resolve().parent.joinpath(".env").read_text().splitlines():
+    env_path = Path(__file__).resolve().parent.joinpath(".env")
+    if not env_path.exists():
+        return  # Railway injects env vars directly — no .env file needed
+    for line in env_path.read_text().splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
