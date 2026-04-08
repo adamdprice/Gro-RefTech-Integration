@@ -119,6 +119,9 @@ def main(*, dry_run: bool = False) -> None:
         print("Set HUBSPOT_ACCESS_TOKEN and REFTECH_API_KEY in .env", file=sys.stderr)
         sys.exit(1)
     ot = os.environ.get("HUBSPOT_ATTENDEE_OBJECT_TYPE_ID", "2-133351180")
+    # Only sync attendees whose festival_code matches this value.
+    # Leave unset (or blank) to sync all attendees with send_to_onsite_badge_printing_system=Yes.
+    festival_code = os.environ.get("FESTIVAL_CODE", "").strip() or None
     # Number of parallel workers. Default 10; override with REFTECH_SYNC_WORKERS.
     workers = int(os.environ.get("REFTECH_SYNC_WORKERS", "10"))
 
@@ -140,7 +143,7 @@ def main(*, dry_run: bool = False) -> None:
     all_rows: list = []
     after = None
     while True:
-        page = hs_search(token, ot, after)
+        page = hs_search(token, ot, after, festival_code=festival_code)
         all_rows.extend(page.get("results") or [])
         paging = page.get("paging") or {}
         if "next" not in paging:
@@ -149,7 +152,11 @@ def main(*, dry_run: bool = False) -> None:
         if not after:
             break
 
-    print(f"{len(all_rows)} record(s) with send_to_reftech=Yes  (workers={workers})\n")
+    festival_label = f"festival_code={festival_code}" if festival_code else "all festivals"
+    print(
+        f"{len(all_rows)} record(s) with send_to_onsite_badge_printing_system=Yes"
+        f" ({festival_label}, workers={workers})\n"
+    )
 
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {

@@ -113,7 +113,7 @@ def apply_reftech_sync_result_to_hubspot(
             PROP_SYNC_DATE: sync_d,
             PROP_ERROR: "",
             PROP_ERROR_DATE: "",
-            "send_to_reftech": "",
+            "send_to_onsite_badge_printing_system": "",
         }
         if reftech_delegate_id and str(reftech_delegate_id).strip():
             props[PROP_DELEGATE_ID] = str(reftech_delegate_id).strip()

@@ -22,6 +22,7 @@ HS_ATTENDEE_PROPERTIES = [
     "payment_status",
     "country",
     "exhibiting_as_associated_festival_sponsor",
+    "festival_code",
     "hs_object_id",
     "reftech_delegate_id",
 ]
@@ -41,11 +42,25 @@ def load_env() -> None:
             os.environ[k] = v
 
 
-def hs_search(token: str, object_type: str, after: str | None = None) -> dict:
+def hs_search(
+    token: str,
+    object_type: str,
+    after: str | None = None,
+    festival_code: str | None = None,
+) -> dict:
+    filters = [
+        {
+            "propertyName": "send_to_onsite_badge_printing_system",
+            "operator": "EQ",
+            "value": "Yes",
+        }
+    ]
+    if festival_code:
+        filters.append(
+            {"propertyName": "festival_code", "operator": "EQ", "value": festival_code}
+        )
     body: dict = {
-        "filterGroups": [
-            {"filters": [{"propertyName": "send_to_reftech", "operator": "EQ", "value": "Yes"}]}
-        ],
+        "filterGroups": [{"filters": filters}],
         "properties": HS_ATTENDEE_PROPERTIES,
         "limit": 100,
     }
