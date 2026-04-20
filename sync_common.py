@@ -188,6 +188,8 @@ class SyncFormBuilders:
             return choices.get("paid")
         if s in ("no", "unpaid", "false", "n"):
             return choices.get("unpaid")
+        if s in ("complimentary",):
+            return choices.get("complimentary")
         if "paid" in s and "un" not in s[:2]:
             return choices.get("paid")
         return choices.get("unpaid")
