@@ -182,7 +182,7 @@ class SyncFormBuilders:
     def payment_id(field_meta: dict, hs_val: object) -> str | None:
         choices = {c["name"].lower(): c["id"] for c in (field_meta.get("choices") or [])}
         if hs_val is None or str(hs_val).strip() == "":
-            return choices.get("unpaid")
+            return None
         s = str(hs_val).strip().lower()
         if s in ("yes", "paid", "true", "y"):
             return choices.get("paid")
